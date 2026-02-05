@@ -9,10 +9,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-slate-50 text-slate-900">
         <AuthProvider>
           <Navbar />
-          {children}
+          <main className="max-w-6xl mx-auto px-4 py-6">{children}</main>
         </AuthProvider>
       </body>
     </html>

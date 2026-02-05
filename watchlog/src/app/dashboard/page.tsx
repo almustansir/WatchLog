@@ -108,27 +108,32 @@ export default function DashboardPage() {
 
         <div className="grid gap-4 mt-4">
           {shows.map((show) => (
-            <div className="border rounded p-4 flex justify-between items-center">
+            <div
+              key={show.id}
+              className="bg-white rounded-xl border p-5 flex justify-between items-center hover:shadow-sm transition"
+            >
               <div>
-                <h2 className="font-semibold">{show.title}</h2>
-                <p className="text-sm text-gray-600">
-                  {show.type.toUpperCase()} · Episodes watched:{" "}
-                  {show.episodesWatched}
+                <h2 className="font-semibold text-lg">{show.title}</h2>
+                <p className="text-sm text-slate-500 mt-1">
+                  {show.type.toUpperCase()} · Episodes: {show.episodesWatched}
                 </p>
               </div>
 
               <div className="flex items-center gap-4">
-                <span className="font-bold">⭐ {show.rating}/10</span>
+                <span className="font-semibold text-emerald-600">
+                  ⭐ {show.rating}/10
+                </span>
+
                 <button
                   onClick={() => startEdit(show)}
-                  className="text-blue-600 hover:underline"
+                  className="text-indigo-600 hover:underline text-sm"
                 >
                   Edit
                 </button>
 
                 <button
                   onClick={() => handleDelete(show.id)}
-                  className="text-red-600 hover:underline"
+                  className="text-rose-500 hover:underline text-sm"
                 >
                   Delete
                 </button>

@@ -1,29 +1,67 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const { user } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  if (!user) return null; // hide navbar if not logged in
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/login");
+  };
+
+  const linkClass = (path: string) =>
+    `text-sm font-medium transition ${
+      pathname === path
+        ? "text-indigo-600"
+        : "text-slate-600 hover:text-indigo-600"
+    }`;
 
   return (
-    <nav className="flex items-center justify-between p-4 border-b">
-      <div className="space-x-4">
-        <Link href="/dashboard">Dashboard</Link>
-        <Link href="/add-show">Add Show</Link>
-        <Link href="/profile">Profile</Link>
-      </div>
+    <nav className="bg-white border-b">
+      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+        {/* Left: Logo + Nav Links */}
+        <div className="flex items-center gap-8">
+          <Link href="/dashboard" className="font-bold text-lg text-indigo-600">
+            WatchLog
+          </Link>
 
-      <button
-        onClick={() => signOut(auth)}
-        className="border px-4 py-1 rounded"
-      >
-        Logout
-      </button>
+          {user && (
+            <div className="hidden sm:flex items-center gap-6">
+              <Link href="/dashboard" className={linkClass("/dashboard")}>
+                Dashboard
+              </Link>
+              <Link href="/add-show" className={linkClass("/add-show")}>
+                Add Show
+              </Link>
+              <Link href="/profile" className={linkClass("/profile")}>
+                Profile
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Right: User + Logout */}
+        {user && (
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-slate-500 hidden md:block">
+              {user.email}
+            </span>
+            <button
+              onClick={handleLogout}
+              className="text-sm text-rose-500 hover:text-rose-600 transition"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+      </div>
     </nav>
   );
 }
